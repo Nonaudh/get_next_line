@@ -3,26 +3,31 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+void    ft_putstr(char *tab)
+{
+	printf("%s", tab);
+}
+
+
 char	*get_next_line(int fd)
 {
-	int buffsize = 25;
+	int buffsize = 10;
 	char *tab;
-	int x = 1;
+	int x = buffsize;
 
-	tab = malloc(sizeof(char) * 250);
-	while (x != 0)
+	tab = malloc(sizeof(char) * buffsize);
+	while (x == buffsize)
 	{
 		x = read(fd, tab, buffsize);
+		if (x != 0)
+			ft_putstr(tab);
 	}
 	return (tab);
 }
 
-int main ()
+int 	main(void)
 {
 	int fd = open("test.txt", O_RDONLY);
-	char *tab =  get_next_line(fd);
-	printf("%s", tab);
-	free (tab);
-	
+	get_next_line(fd);
 
 }
