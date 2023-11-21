@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	int		x;
 	int		i;
@@ -22,6 +22,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	i = 0;
 	z = 0;
 	if (!s1)
+	{
+		s1 = malloc(sizeof(char) * 1);
+		s1[0] = 0;
+	}
+	if (!s1 && !s2)
 		return (NULL);
 	x = ft_strlen(s1) + ft_strlen(s2);
 	tab = malloc(sizeof(char) * (x + 1));
