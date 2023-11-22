@@ -6,7 +6,7 @@
 /*   By: ahuge <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 15:14:09 by ahuge             #+#    #+#             */
-/*   Updated: 2023/11/22 18:30:41 by ahuge            ###   ########.fr       */
+/*   Updated: 2023/11/22 19:23:44 by ahuge            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ char	*line_to_trim(int fd, char *tab)
 			if (!temp)
 				return (NULL);
 	}
+	free(buffer);
 	return (temp);
 		
 }
@@ -84,6 +85,8 @@ char	*get_next_line(int fd)
 		if (!buffer)
 			return (NULL);	
 	tab = left_line(buffer);
+		if (!tab)
+			return (NULL);
 	buffer = trim_the_line(buffer);
 		if (!buffer)
 			return (NULL);
@@ -94,6 +97,10 @@ int main ()
 {
 	int fd = open("test.txt", O_RDONLY);
 	for (int i = 0; i < 8; i++)
+	{
 		printf("%s", get_next_line(fd));
+		//free(get_next_line(fd));
+	}
 
 }
+
