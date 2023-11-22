@@ -11,10 +11,10 @@ char	*line_to_trim(int fd, char *tab)
 	while (x != 0 && !(ft_strchr(buffer, '\n')))
 	{
 		x = read(fd, buffer, 10);
+		buffer[x] = 0;
 		tab = ft_strjoin(tab, buffer);
 	}
 	free(buffer);
-	printf("tab to trim = %s\n", tab);
 	return (tab);
 }
 
@@ -43,8 +43,7 @@ char	*next_line(char *tab)
 
 	while (tab[i] && tab[i] != '\n')
 		i++;
-	printf("tab = %s\n", tab);
-	return (tab + i);
+	return (tab);
 }
 
 char	*get_next_line(int fd)
@@ -54,18 +53,23 @@ char	*get_next_line(int fd)
 
 	tab = line_to_trim(fd, tab);
 	buffer = trim_the_line(tab);
-	tab = next_line(tab);
+	//printf("|%s|\n", tab);
+	//tab = next_line(tab);
+	//printf("%s\n", tab);
 	return (buffer);
 }
 
 int 	main(void)
 {
 	int fd = open("test.txt", O_RDONLY);
-	printf("|%s|\n", get_next_line(fd));
-	printf("|%s|\n", get_next_line(fd));
-	printf("|%s|\n", get_next_line(fd));
-	printf("|%s|\n", get_next_line(fd));
-	printf("|%s|\n", get_next_line(fd));
+	int i = 0;
+	while (i < 6)
+	{
+		printf("%s\n", get_next_line(fd));
+		printf("%d", i);
+		i++;
+	}
+		
 
 
 }
