@@ -6,7 +6,7 @@
 /*   By: ahuge <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 15:14:09 by ahuge             #+#    #+#             */
-/*   Updated: 2023/11/22 17:34:56 by ahuge            ###   ########.fr       */
+/*   Updated: 2023/11/22 18:30:41 by ahuge            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ char	*left_line(char *temp)
 	return (tab);
 }
 
-char	*line_to_trim(int fd)
+char	*line_to_trim(int fd, char *tab)
 {
-	char	*buffer = NULL;
-	char	*temp = NULL;
-	static char	*tab;
+	char	*buffer;
+	char	*temp;
 	int	x = 1;
 
 	temp = tab;
@@ -55,9 +54,6 @@ char	*line_to_trim(int fd)
 			if (!temp)
 				return (NULL);
 	}
-	tab = left_line(temp);
-		if (!tab)
-			return (NULL);
 	return (temp);
 		
 }
@@ -82,10 +78,12 @@ char	*trim_the_line(char *tab)
 char	*get_next_line(int fd)
 {
 	char	*buffer;
+	static char	*tab = NULL;
 	
-	buffer = line_to_trim(fd);
+	buffer = line_to_trim(fd, tab);
 		if (!buffer)
-			return (NULL);
+			return (NULL);	
+	tab = left_line(buffer);
 	buffer = trim_the_line(buffer);
 		if (!buffer)
 			return (NULL);
