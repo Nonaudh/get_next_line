@@ -29,7 +29,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	z = 0;
 	if (!s1)
 		s1 = malloc_and_fill(s1);
-	if (!s1 && !s2)
+	if (!s1 || !s2)
 		return (NULL);
 	tab = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (tab == NULL)

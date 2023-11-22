@@ -49,7 +49,10 @@ char	*line_to_trim(int fd, char *tab)
 	{
 		x = read(fd, buffer, BUFFER_SIZE);
 			if (x == -1)
+			{
+				free(buffer);
 				return (NULL);
+			}
 		temp = ft_strjoin(temp, buffer);
 			if (!temp)
 				return (NULL);
@@ -63,7 +66,7 @@ char	*trim_the_line(char *tab)
 {
 	int	i = 0;
 	char	*temp;
-	
+
 	temp = malloc(sizeof(char) * (ft_strlen(tab) + 1));
 		if (!temp)
 			return (NULL);
@@ -73,6 +76,7 @@ char	*trim_the_line(char *tab)
 		i++;
 	}
 	temp[i] = 0;
+	//free (tab);
 	return (temp);
 }
 
@@ -96,11 +100,14 @@ char	*get_next_line(int fd)
 int main ()
 {
 	int fd = open("test.txt", O_RDONLY);
-	for (int i = 0; i < 8; i++)
+	char	*tab;
+	for (int i = 0; i < 1; i++)
 	{
-		printf("%s", get_next_line(fd));
-		//free(get_next_line(fd));
+		tab = get_next_line(fd);
+		printf("%s", tab);
+		free (tab);
 	}
-
+	close (fd);
 }
+
 
