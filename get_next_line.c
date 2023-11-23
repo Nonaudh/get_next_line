@@ -20,11 +20,12 @@ char	*trim_the_line(char *full_line)
 	final_line = malloc(sizeof(char) * (ft_strlen(full_line) + 1));
 		if (!final_line)
 			return (NULL);
-	while (full_line[i] && full_line[i - 1] != '\n')
+	while (full_line[i] && full_line[i] != '\n')
 	{
 		final_line[i] = full_line[i];
 		i++;
 	}
+	i++;////////////////////////////// to check
 	final_line[i] = 0;
 	free (full_line);
 	return (final_line);
@@ -35,9 +36,14 @@ char	*save_surplus(char *full_line)
 	int	i = 0;
 	int	j = 0;
 	char	*surplus;
-	//printf("fl = %s\n", full_line);
-	while (full_line[i] && full_line[i - 1] != '\n')
+	if (!full_line)
+		return (NULL);
+	while (full_line[i] && full_line[i] != '\n')
 		i++;
+	if (full_line[i] == '\n')
+	{	
+		i++;///////////////////////////// to check
+	}
 	surplus = malloc(sizeof(char) * (ft_strlen(full_line) - i + 1));
 		if (!surplus)
 			return (NULL);
@@ -90,7 +96,7 @@ char	*line_to_trim(int fd, char *surplus)
 char	*get_next_line(int fd)
 {
 	char		*full_line;
-	static char	*surplus = NULL;
+	static char	*surplus = NULL;/////////////////// malloc ou alloc ?
 	char		*final_line;
 	
 	
@@ -110,7 +116,7 @@ int main ()
 {
 	int fd = open("test.txt", O_RDONLY);
 	char	*line;
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		line = get_next_line(fd);
 		printf("%s", line);
@@ -119,5 +125,3 @@ int main ()
 	close (fd);
 	return (1);
 }
-
-
