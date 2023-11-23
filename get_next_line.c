@@ -12,102 +12,112 @@
 
 #include "get_next_line.h"
 
-char	*left_line(char *temp)
+char	*trim_the_line(char *full_line)
+{
+	int	i = 0;
+	char	*final_line;
+
+	final_line = malloc(sizeof(char) * (ft_strlen(full_line) + 1));
+		if (!final_line)
+			return (NULL);
+	while (full_line[i] && full_line[i - 1] != '\n')
+	{
+		final_line[i] = full_line[i];
+		i++;
+	}
+	final_line[i] = 0;
+	free (full_line);
+	return (final_line);
+}
+
+char	*save_surplus(char *full_line)
 {
 	int	i = 0;
 	int	j = 0;
-	char	*tab;
-
-	while (temp[i] && temp[i - 1] != '\n')
+	char	*surplus;
+	//printf("fl = %s\n", full_line);
+	while (full_line[i] && full_line[i - 1] != '\n')
 		i++;
-
-	tab = malloc(sizeof(char) * (ft_strlen(temp) - i + 1));
-		if (!tab)
+	surplus = malloc(sizeof(char) * (ft_strlen(full_line) - i + 1));
+		if (!surplus)
 			return (NULL);
-	while (temp[i])
+	while (full_line[i])
 	{
-		tab[j] = temp[i];
+		surplus[j] = full_line[i];
 		i++;
 		j++;
 	}
-	tab[j] = 0;
-	return (tab);
+	surplus[j] = 0;
+	return (surplus);
 }
 
-char	*line_to_trim(int fd, char *tab)
+char	*line_to_trim(int fd, char *surplus)
 {
 	char	*buffer;
-	char	*temp;
+	char	*line = NULL;
 	int	x = 1;
 
-	temp = tab;
+	if (surplus)
+	{
+		line = malloc(sizeof(char) * (ft_strlen(surplus) + 1));
+		line[0] = 0;
+		ft_strlcpy(line, surplus, ft_strlen(surplus) + 1);
+		free (surplus);
+	}
+
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!buffer)
 			return (NULL);
-
-	while (x != 0 && !(ft_strchr(buffer, '\n')))
+	buffer[0] = 0;
+	while (!(ft_strchr(buffer, '\n')) && x != 0)
 	{
 		x = read(fd, buffer, BUFFER_SIZE);
+		buffer[x] = 0;
+		
 			if (x == -1)
 			{
 				free(buffer);
 				return (NULL);
 			}
-		temp = ft_strjoin(temp, buffer);
-			if (!temp)
+		line = ft_strjoin(line, buffer);
+			if (!line)
 				return (NULL);
 	}
 	free(buffer);
-	return (temp);
-		
-}
-
-char	*trim_the_line(char *tab)
-{
-	int	i = 0;
-	char	*temp;
-
-	temp = malloc(sizeof(char) * (ft_strlen(tab) + 1));
-		if (!temp)
-			return (NULL);
-	while (tab[i] && tab[i - 1] != '\n')
-	{
-		temp[i] = tab[i];
-		i++;
-	}
-	temp[i] = 0;
-	//free (tab);
-	return (temp);
+	return (line);	
 }
 
 char	*get_next_line(int fd)
 {
-	char	*buffer;
-	static char	*tab = NULL;
+	char		*full_line;
+	static char	*surplus = NULL;
+	char		*final_line;
 	
-	buffer = line_to_trim(fd, tab);
-		if (!buffer)
-			return (NULL);	
-	tab = left_line(buffer);
-		if (!tab)
+	
+	full_line = line_to_trim(fd, surplus);
+		if (!full_line)
+			return (NULL);		
+	surplus = save_surplus(full_line);
+		if (!surplus)
 			return (NULL);
-	buffer = trim_the_line(buffer);
-		if (!buffer)
+	final_line = trim_the_line(full_line);
+		if (!final_line)
 			return (NULL);
-	return (buffer);
+	return (final_line);
 }
 
 int main ()
 {
 	int fd = open("test.txt", O_RDONLY);
-	char	*tab;
-	for (int i = 0; i < 1; i++)
+	char	*line;
+	for (int i = 0; i < 2; i++)
 	{
-		tab = get_next_line(fd);
-		printf("%s", tab);
-		free (tab);
+		line = get_next_line(fd);
+		printf("%s", line);
+		free (line);
 	}
 	close (fd);
+	return (1);
 }
 
 

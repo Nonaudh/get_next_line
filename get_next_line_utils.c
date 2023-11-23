@@ -12,40 +12,23 @@
 
 #include "get_next_line.h"
 
-char	*malloc_and_fill(char *s1)
+size_t  ft_strlcpy(char *dest, const char *src, size_t size)
 {
-	s1 = malloc(sizeof(char) * 1);
-	s1[0] = 0;
-	return (s1);
-}
+		size_t	i;
+		int		x;
 
-char	*ft_strjoin(char *s1, char *s2)
-{
-	int		i;
-	int		z;
-	char	*tab;
-
-	i = 0;
-	z = 0;
-	if (!s1)
-		s1 = malloc_and_fill(s1);
-	if (!s1 || !s2)
-		return (NULL);
-	tab = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (tab == NULL)
-		return (NULL);
-	while (s1[i])
-	{
-		tab[i] = s1[i];
-		i++;
-	}
-	while (s2[z])
-	{
-		tab[i + z] = s2[z];
-		z++;
-	}
-	tab[i + z] = 0;
-	return (tab);
+		i = 0;
+		x = ft_strlen(src);
+		if (size != 0)
+		{
+			while (src[i] && i < size - 1)
+				{
+						dest[i] = src[i];
+						i++;
+				}
+				dest[i] = 0;
+		}
+		return (x);
 }
 
 char	*ft_strchr(const char *src, int c)
@@ -58,6 +41,46 @@ char	*ft_strchr(const char *src, int c)
 	if (src[i] == (char) c)
 		return ((char *)src + i);
 	return (0);
+}
+
+char	*malloc_and_fill(char *s1)
+{
+	s1 = malloc(sizeof(char) * 1);
+	s1[0] = 0;
+	return (s1);
+}
+
+char	*ft_strjoin(char *line, char *buffer)
+{
+	int		i;
+	int		z;
+	char	*tab;
+
+	i = 0;
+	z = 0;
+	if (!line)
+		line = malloc_and_fill(line);
+	if (!line || !buffer)
+		return (NULL);
+	tab = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(buffer) + 1));
+	if (tab == NULL)
+		return (NULL);
+	if (line)
+	{
+	while (line[i])
+	{
+		tab[i] = line[i];
+		i++;
+	}
+	}
+	while (buffer[z])
+	{
+		tab[i + z] = buffer[z];
+		z++;
+	}
+	tab[i + z] = 0;
+	free (line);
+	return (tab);
 }
 
 int	ft_strlen(const char *s)
