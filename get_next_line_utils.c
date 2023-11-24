@@ -39,12 +39,12 @@ char	*ft_strchr(const char *src, int c)
 
 	i = 0;
 	if (!src)
-		return(0);
+		return(NULL);
 	while (src[i] && src[i] != (char) c)
 		i++;
 	if (src[i] == (char) c)
 		return ((char *)src + i);
-	return (0);
+	return (NULL);
 }
 
 char	*ft_strjoin(char *line, char *buffer)

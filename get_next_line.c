@@ -63,7 +63,7 @@ char	*save_surplus(char *full_line)
 	return (surplus);
 }
 
-char	*fill_the_line (int fd, char *line, char *buffer)
+char	*fill_the_lines(int fd, char *lines, char *buffer)
 {
 	int	x;
 
@@ -71,43 +71,45 @@ char	*fill_the_line (int fd, char *line, char *buffer)
 	while (!(ft_strchr(buffer, '\n')) && x != 0)
 		{
 			x = read(fd, buffer, BUFFER_SIZE);
-			buffer[x] = 0;
-				if (x == -1 || x == 0)
-				{
-					free (buffer);
-						if(line[0] != 0)
-							return(line);
-					free(line);
-					return (NULL);
-				}		
-			line = ft_strjoin(line, buffer);
-				if (!line)
+			if (x >= 0)
+				buffer[x] = 0;
+					if (x == -1 || x == 0)
+					{
+						free (buffer);
+						if(lines[0] != 0)
+							return(lines);
+						free(lines);
+						return (NULL);
+					}		
+			lines = ft_strjoin(lines, buffer);
+				if (!lines)
 					return (NULL);
 		}
 	free(buffer);
-	return (line);
+	return (lines);
 	}
 
 char	*line_to_trim(int fd, char *surplus)
 {
 	char	*buffer;
-	char	*line;
+	char	*lines;
+	char	*full_line;
 
-	line = malloc(sizeof(char) * (ft_strlen(surplus) + 1));
-		if(!line)
+	lines = malloc(sizeof(char) * (ft_strlen(surplus) + 1));
+		if(!lines)
 			return(NULL);
-	line[0] = 0;
+	lines[0] = 0;
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!buffer)
 			return (NULL);
 	buffer[0] = 0;
 	if (surplus)
 	{
-		ft_strlcpy(line, surplus, ft_strlen(surplus) + 1);
+		ft_strlcpy(lines, surplus, ft_strlen(surplus) + 1);
 		free (surplus);
 	}
-	line = fill_the_line(fd, line, buffer);
-	return (line);	
+	full_line = fill_the_lines(fd, lines, buffer);
+	return (full_line);
 }
 
 char	*get_next_line(int fd)
@@ -117,7 +119,7 @@ char	*get_next_line(int fd)
 	char		*final_line;
 	
 	if (fd < 0 || fd > 64 || BUFFER_SIZE <= 0)
-		return (0);
+		return (NULL);
 	full_line = line_to_trim(fd, surplus);
 		if (!full_line)
 			return (NULL);		
@@ -129,10 +131,10 @@ char	*get_next_line(int fd)
 			return (NULL);
 	return (final_line);
 }
-/*
-int main (void)
+
+/*int main (void)
 {
-	int fd = open("test.txt", O_RDONLY);
+	int 	fd = open("test.txt", O_RDONLY);
 	char	*line;
 	for (int i = 0; i < 4; i++)
 	{
@@ -142,5 +144,4 @@ int main (void)
 	}
 	close (fd);
 	return (1);
-}
-*/
+}*/
