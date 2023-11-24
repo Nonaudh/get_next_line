@@ -12,13 +12,13 @@
 
 #include "get_next_line.h"
 
-char	*trim_the_line(char *full_line)
+char	*trim_the_line(char *full_line, char *surplus)
 {
 	int		i;
 	char	*final_line;
 	
 	i = 0;
-	final_line = malloc(sizeof(char) * (ft_strlen(full_line) + 1));
+	final_line = malloc(sizeof(char) * (ft_strlen(full_line) - ft_strlen(surplus) + 1));
 		if (!final_line)
 			return (NULL);
 	while (full_line[i] && full_line[i] != '\n')
@@ -124,11 +124,7 @@ char	*get_next_line(int fd)
 		if (!full_line)
 			return (NULL);		
 	surplus = save_surplus(full_line);
-		if (!surplus)
-			return (NULL);
-	final_line = trim_the_line(full_line);
-		if (!final_line)
-			return (NULL);
+	final_line = trim_the_line(full_line, surplus);
 	return (final_line);
 }
 
