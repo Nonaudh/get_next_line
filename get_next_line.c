@@ -14,9 +14,10 @@
 
 char	*trim_the_line(char *full_line)
 {
-	int	i = 0;
+	int		i;
 	char	*final_line;
-
+	
+	i = 0;
 	final_line = malloc(sizeof(char) * (ft_strlen(full_line) + 1));
 		if (!final_line)
 			return (NULL);
@@ -37,16 +38,18 @@ char	*trim_the_line(char *full_line)
 
 char	*save_surplus(char *full_line)
 {
-	int	i = 0;
-	int	j = 0;
+	int		i;
+	int		j;
 	char	*surplus;
+
+	i = 0;
+	j = 0;
 	if (!full_line)
 		return (NULL);
 	while (full_line[i] && full_line[i] != '\n')
 		i++;
 	if (full_line[i] == '\n')
 		i++;
-
 	surplus = malloc(sizeof(char) * (ft_strlen(full_line) - i + 1));
 		if (!surplus)
 			return (NULL);
@@ -60,52 +63,50 @@ char	*save_surplus(char *full_line)
 	return (surplus);
 }
 
+char	*fill_the_line (int fd, char *line, char *buffer)
+{
+	int	x;
+
+	x = 1;
+	while (!(ft_strchr(buffer, '\n')) && x != 0)
+		{
+			x = read(fd, buffer, BUFFER_SIZE);
+			buffer[x] = 0;
+				if (x == -1 || x == 0)
+				{
+					free (buffer);
+						if(line[0] != 0)
+							return(line);
+					free(line);
+					return (NULL);
+				}		
+			line = ft_strjoin(line, buffer);
+				if (!line)
+					return (NULL);
+		}
+	free(buffer);
+	return (line);
+	}
+
 char	*line_to_trim(int fd, char *surplus)
 {
 	char	*buffer;
 	char	*line;
-	int	x = 1;
 
-	if (surplus)
-	{
-		line = malloc(sizeof(char) * (ft_strlen(surplus) + 1));
-		line[0] = 0;
-		ft_strlcpy(line, surplus, ft_strlen(surplus) + 1);
-		free (surplus);
-	}
-	else
-	{
-		line = malloc(sizeof(char) * 1);
-		line[0] = 0;
-	}
-
+	line = malloc(sizeof(char) * (ft_strlen(surplus) + 1));
+		if(!line)
+			return(NULL);
+	line[0] = 0;
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!buffer)
 			return (NULL);
 	buffer[0] = 0;
-	while (!(ft_strchr(buffer, '\n')) && x != 0)
+	if (surplus)
 	{
-		
-		x = read(fd, buffer, BUFFER_SIZE);
-		buffer[x] = 0;
-		
-			if (x == -1)
-			{
-				free(line);
-				free (buffer);
-				return (NULL);
-			}
-			/*if (x == 0)
-			{
-				free (buffer);
-				free (line);
-				return (NULL);
-			}*/
-		line = ft_strjoin(line, buffer);
-			if (!line)
-				return (NULL);
+		ft_strlcpy(line, surplus, ft_strlen(surplus) + 1);
+		free (surplus);
 	}
-	free(buffer);
+	line = fill_the_line(fd, line, buffer);
 	return (line);	
 }
 
@@ -115,9 +116,8 @@ char	*get_next_line(int fd)
 	static char	*surplus = NULL;/////////////////// malloc ou alloc ?
 	char		*final_line;
 	
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 64 || BUFFER_SIZE <= 0)
 		return (0);
-	
 	full_line = line_to_trim(fd, surplus);
 		if (!full_line)
 			return (NULL);		
@@ -130,7 +130,7 @@ char	*get_next_line(int fd)
 	return (final_line);
 }
 /*
-int main ()
+int main (void)
 {
 	int fd = open("test.txt", O_RDONLY);
 	char	*line;
