@@ -43,7 +43,7 @@ char	*ft_strchr(const char *src, int c)
 	return (0);
 }
 
-char	*malloc_and_fill(char *s1)
+char	*fill_the_empty(char *s1)
 {
 	s1 = malloc(sizeof(char) * 1);
 	s1[0] = 0;
@@ -58,8 +58,8 @@ char	*ft_strjoin(char *line, char *buffer)
 
 	i = 0;
 	z = 0;
-	if (!line)
-		line = malloc_and_fill(line);
+	//if (!line)
+	//	line = fill_the_empty(line);
 	if (!line || !buffer)
 		return (NULL);
 	tab = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(buffer) + 1));
