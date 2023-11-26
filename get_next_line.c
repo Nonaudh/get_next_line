@@ -115,7 +115,7 @@ char	*line_to_trim(int fd, char *surplus)
 char	*get_next_line(int fd)
 {
 	char		*full_line;
-	static char	*surplus = NULL;/////////////////// malloc ou alloc ?
+	static char	*surplus = NULL;
 	char		*final_line;
 	
 	if (fd < 0 || fd > 64 || BUFFER_SIZE <= 0)
@@ -127,7 +127,7 @@ char	*get_next_line(int fd)
 	final_line = trim_the_line(full_line, surplus);
 	return (final_line);
 }
-
+/*
 int main (void)
 {
 	int 	fd = open("test.txt", O_RDONLY);
@@ -141,3 +141,4 @@ int main (void)
 	close (fd);
 	return (1);
 }
+*/
