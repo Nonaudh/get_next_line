@@ -12,15 +12,15 @@
 
 #include "get_next_line_bonus.h"
 
-char	*trim_the_line(char *full_line, char *surplus)
+char	*trim_the_line(char *full_line, size_t	surplus)
 {
 	int		i;
 	char	*final_line;
-	
+
 	i = 0;
-	final_line = malloc(sizeof(char) * (ft_strlen(full_line) - ft_strlen(surplus) + 1));
-		if (!final_line)
-			return (NULL);
+	final_line = malloc(sizeof(char) * (ft_strlen(full_line) - surplus + 1));
+	if (!final_line)
+		return (NULL);
 	while (full_line[i] && full_line[i] != '\n')
 	{
 		final_line[i] = full_line[i];
@@ -51,8 +51,8 @@ char	*save_surplus(char *full_line)
 	if (full_line[i] == '\n')
 		i++;
 	surplus = malloc(sizeof(char) * (ft_strlen(full_line) - i + 1));
-		if (!surplus)
-			return (NULL);
+	if (!surplus)
+		return (NULL);
 	while (full_line[i])
 	{
 		surplus[j] = full_line[i];
@@ -69,25 +69,25 @@ char	*fill_the_lines(int fd, char *lines, char *buffer)
 
 	x = 1;
 	while (!(ft_strchr(buffer, '\n')) && x != 0)
+	{
+		x = read(fd, buffer, BUFFER_SIZE);
+		if (x >= 0)
+			buffer[x] = 0;
+		if (x == -1 || x == 0)
 		{
-			x = read(fd, buffer, BUFFER_SIZE);
-			if (x >= 0)
-				buffer[x] = 0;
-					if (x == -1 || x == 0)
-					{
-						free (buffer);
-						if(lines[0] != 0)
-							return(lines);
-						free(lines);
-						return (NULL);
-					}		
-			lines = ft_strjoin(lines, buffer);
-				if (!lines)
-					return (NULL);
+			free(buffer);
+			if (lines[0] != 0)
+				return (lines);
+			free(lines);
+			return (NULL);
 		}
+		lines = ft_strjoin(lines, buffer);
+		if (!lines)
+			return (NULL);
+	}
 	free(buffer);
 	return (lines);
-	}
+}
 
 char	*line_to_trim(int fd, char *surplus)
 {
@@ -96,12 +96,12 @@ char	*line_to_trim(int fd, char *surplus)
 	char	*full_line;
 
 	lines = malloc(sizeof(char) * (ft_strlen(surplus) + 1));
-		if(!lines)
-			return(NULL);
+	if (!lines)
+		return (NULL);
 	lines[0] = 0;
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (!buffer)
-			return (NULL);
+	if (!buffer)
+		return (NULL);
 	buffer[0] = 0;
 	if (surplus)
 	{
@@ -117,14 +117,14 @@ char	*get_next_line(int fd)
 	char		*full_line;
 	static char	*surplus[64];
 	char		*final_line;
-	
+
 	if (fd < 0 || fd > 64 || BUFFER_SIZE <= 0)
 		return (NULL);
 	full_line = line_to_trim(fd, surplus[fd]);
-		if (!full_line)
-			return (NULL);		
+	if (!full_line)
+		return (NULL);
 	surplus[fd] = save_surplus(full_line);
-	final_line = trim_the_line(full_line, surplus[fd]);
+	final_line = trim_the_line(full_line, ft_strlen(surplus[fd]));
 	return (final_line);
 }
 /*

@@ -12,25 +12,25 @@
 
 #include "get_next_line.h"
 
-size_t  ft_strlcpy(char *dest, const char *src, size_t size)
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-		size_t	i;
-		int		x;
+	size_t	i;
+	int		x;
 
-		i = 0;
-		x = ft_strlen(src);
-		if (!dest || !src)
-			return(0);
-		if (size != 0)
+	i = 0;
+	x = ft_strlen(src);
+	if (!dest || !src)
+		return (0);
+	if (size != 0)
+	{
+		while (src[i] && i < size - 1)
 		{
-			while (src[i] && i < size - 1)
-				{
-						dest[i] = src[i];
-						i++;
-				}
-				dest[i] = 0;
+			dest[i] = src[i];
+			i++;
 		}
-		return (x);
+		dest[i] = 0;
+	}
+	return (x);
 }
 
 char	*ft_strchr(const char *src, int c)
@@ -39,7 +39,7 @@ char	*ft_strchr(const char *src, int c)
 
 	i = 0;
 	if (!src)
-		return(NULL);
+		return (NULL);
 	while (src[i] && src[i] != (char) c)
 		i++;
 	if (src[i] == (char) c)
@@ -60,7 +60,6 @@ char	*ft_strjoin(char *line, char *buffer)
 	tab = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(buffer) + 1));
 	if (tab == NULL)
 		return (NULL);
-
 	while (line[i])
 	{
 		tab[i] = line[i];
