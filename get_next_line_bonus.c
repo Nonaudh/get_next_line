@@ -124,6 +124,13 @@ char	*get_next_line(int fd)
 	if (!full_line)
 		return (NULL);
 	surplus[fd] = save_surplus(full_line);
+	if (!surplus[fd])
+		return(NULL);
+	if (surplus[fd][0] == 0)
+	{
+		free(surplus[fd]);
+		surplus[fd] = NULL;
+	}
 	final_line = trim_the_line(full_line, ft_strlen(surplus[fd]));
 	return (final_line);
 }

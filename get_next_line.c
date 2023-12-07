@@ -124,15 +124,22 @@ char	*get_next_line(int fd)
 	if (!full_line)
 		return (NULL);
 	surplus = save_surplus(full_line);
+	if (!surplus)
+		return(NULL);
+	if (surplus[0] == 0)
+	{
+		free(surplus);
+		surplus = NULL;
+	}
 	final_line = trim_the_line(full_line, ft_strlen(surplus));
 	return (final_line);
 }
 /*
 int main (void)
 {
-	int 	fd = open("test.txt", O_RDONLY);
+	int 	fd = open("test2.txt", O_RDONLY);
 	char	*line;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		line = get_next_line(fd);
 		printf("%s", line);
