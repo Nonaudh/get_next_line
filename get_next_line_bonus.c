@@ -115,10 +115,10 @@ char	*line_to_trim(int fd, char *surplus)
 char	*get_next_line(int fd)
 {
 	char		*full_line;
-	static char	*surplus[64];
+	static char	*surplus[1024];
 	char		*final_line;
 
-	if (fd < 0 || fd > 64 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
 	full_line = line_to_trim(fd, surplus[fd]);
 	if (!full_line)

@@ -118,7 +118,7 @@ char	*get_next_line(int fd)
 	static char	*surplus = NULL;
 	char		*final_line;
 
-	if (fd < 0 || fd > 64 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
 	full_line = line_to_trim(fd, surplus);
 	if (!full_line)
