@@ -76,7 +76,7 @@ char	*fill_the_lines(int fd, char *lines, char *buffer)
 		if (x == -1 || x == 0)
 		{
 			free (buffer);
-			if (lines[0] != 0)
+			if (lines[0] != 0 && x == 0)
 				return (lines);
 			free(lines);
 			return (NULL);
